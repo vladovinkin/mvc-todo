@@ -1,0 +1,15 @@
+<h3>Список задач</h3>
+{% for item in tasks %}
+	<div class="mb-3 border">
+		<p class="p-3">{{ item.text }}</p>
+		<div class="text-right">
+			<form action="/task/update" method="post">
+				<input type="hidden" name="id" value="{{ item.id }}">
+				<input type="submit" class="btn btn-dark btn-sm mr-1 mb-1" value="Ред-ть">
+			</form>
+		</div>
+	</div>
+{% endfor %}
+<div class="text-center">
+	<a href="/task/create" class="btn btn-success" tabindex="-1" role="button" aria-disabled="true">Создать задачу</a>
+</div>
