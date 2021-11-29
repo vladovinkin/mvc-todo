@@ -5,7 +5,7 @@ return [
 		'controller' => 'main',
 		'action' => 'index',
 	],
-	'{page:\d+}' => [
+	'main/index/{page:\d+}' => [
 		'controller' => 'main',
 		'action' => 'index',
 	],
