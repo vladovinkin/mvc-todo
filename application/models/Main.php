@@ -6,13 +6,23 @@ use application\core\Model;
 
 class Main extends Model {
 
-	public function getTasks() {
+	public function getTasks($page = 1, $pagination_limit = 10) {
 		$user_id = $this->getId();
+		$start = ($page - 1) * $pagination_limit;
+		$params = [
+			'user_id' => $user_id,
+			'start' => $start,
+			'max' => $pagination_limit,
+		];
 		if ($user_id) {
-			$result = $this->db->row('SELECT id, user_id, text FROM tasks WHERE user_id = ' . $user_id . ' ORDER BY id DESC');
+			$result = $this->db->row('SELECT * FROM tasks WHERE user_id = :user_id ORDER BY id DESC LIMIT :start, :max', $params);
 			return $result;
 		}
 		return [];
+	}
+
+	public function tasksCount($user_id) {
+		return $this->db->column('SELECT COUNT(id) FROM tasks WHERE user_id = :user_id', ['user_id' => $user_id]);
 	}
 
 	/**
