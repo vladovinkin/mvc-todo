@@ -32,14 +32,14 @@ class Pagination {
         }
         if (!is_null($links)) {
             if ($this->current_page > 1) {
-                $links = $this->generateHtml(1, 'Вперед').$links;
+                $links = $this->generateHtml(1, '<<').$links;
             }
             if ($this->current_page < $this->amount) {
-                $links .= $this->generateHtml($this->amount, 'Назад');
+                $links .= $this->generateHtml($this->amount, '>>');
             }
         }
         $html .= $links.' </ul></nav>';
-        return $html;
+        return ($this->amount > 1 ? $html : '');
     }
 
     private function generateHtml($page, $text = null) {
@@ -80,5 +80,9 @@ class Pagination {
 
     private function amount() {
         return ceil($this->total / $this->limit);
+    }
+
+    public function getLimit() {
+        return $this->limit;
     }
 }
