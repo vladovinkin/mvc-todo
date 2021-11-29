@@ -21,7 +21,7 @@ return [
 		'controller' => 'task',
 		'action' => 'create',
 	],
-	'task/update' => [
+	'task/update/{id:\d+}' => [
 		'controller' => 'task',
 		'action' => 'update',
 	],
