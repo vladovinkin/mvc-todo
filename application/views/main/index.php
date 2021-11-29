@@ -5,6 +5,9 @@ $twig = new \Twig\Environment($loader, [
 ]);
 
 echo ($is_authorized
-	? $twig->render('index.html', ['tasks' => $tasks])
+	? $twig->render('index.html', [
+		'tasks' => $tasks,
+		'pagination' => $pagination,
+	])
 	: $twig->render('index_noauth.html'));
 ?>
