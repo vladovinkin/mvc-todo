@@ -40,6 +40,13 @@ class Task extends Model {
 		);
 	}
 
+	public function isTaskExists($id) {
+		$params = [
+			'id' => $id,
+		];
+		return $this->db->column('SELECT id FROM tasks WHERE id = :id', $params);
+	}
+
 	/**
      * Метод возвращает id авторизованного пользователя 
      */
