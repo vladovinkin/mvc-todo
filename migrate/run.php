@@ -1,11 +1,10 @@
 <?php
 
-$config = require '../application/config/db.php';
-
+$config = require 'application/config/db.php';
 $config['versions'] = 'versions';
  
 // Подключаемся к базе данных
-function connectDB() {
+function connectDB($config) {
     $errorMessage = 'Невозможно подключиться к серверу базы данных';
     $conn = new mysqli($config['host'], $config['user'], $config['password'], $config['name']);
     if (!$conn)
@@ -20,7 +19,7 @@ function connectDB() {
 }
  
 // Получаем список файлов для миграций
-function getMigrationFiles($conn) {
+function getMigrationFiles($conn, $config) {
 
     // Находим папку с миграциями
     $sqlFolder = str_replace('\\', '/', realpath(dirname(__FILE__)) . '/');
@@ -56,7 +55,7 @@ function getMigrationFiles($conn) {
 }
  
 // Накатываем миграцию файла
-function migrate($conn, $file) {
+function migrate($conn, $file, $config) {
     // Формируем команду выполнения mysql-запроса из внешнего файла
     $command = sprintf('mysql -u%s -p%s -h %s -D %s < %s', $config['user'], $config['password'], $config['host'], $config['name'], $file);    
     // Выполняем shell-скрипт
@@ -73,27 +72,27 @@ function migrate($conn, $file) {
 
 
 // Стартуем
- 
+
 // Подключаемся к базе
-$conn = connectDB();
+$conn = connectDB($config);
  
 // Получаем список файлов для миграций за исключением тех, которые уже есть в таблице versions
-$files = getMigrationFiles($conn);
+$files = getMigrationFiles($conn, $config);
  
 // Проверяем, есть ли новые миграции
 if (empty($files)) {
-    echo 'Ваша база данных в актуальном состоянии.';
+    echo 'Ваша база данных в актуальном состоянии.' . PHP_EOL;
 } else {
-    echo 'Начинаем миграцию...<br><br>';
+    echo 'Начинаем миграцию...' . PHP_EOL . PHP_EOL;
  
     // Накатываем миграцию для каждого файла
     foreach ($files as $file) {
-        migrate($conn, $file);
+        migrate($conn, $file, $config, $config);
         // Выводим название выполненного файла
-        echo basename($file) . '<br>';
+        echo basename($file) . PHP_EOL;
     }
  
-    echo '<br>Миграция завершена.';    
+    echo PHP_EOL . 'Миграция завершена.' . PHP_EOL;
 }
 
 ?>
